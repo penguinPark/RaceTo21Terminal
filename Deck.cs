@@ -47,7 +47,7 @@ namespace RaceTo21
                     switch (cardSuit) // full name for suits
                     {
                         case "S":
-                            fullName = fullName + "Spades";
+                            fullName = fullName + "Spades"; // the fullname is adding the suits
                             break;
                         case "H":
                             fullName = fullName + "Hearts";
@@ -96,7 +96,7 @@ namespace RaceTo21
         {
             for (int i=0; i<cards.Count; i++)
             {
-                Console.Write(i+":"+cards[i].ID); // a list property can look like an Array!
+                Console.Write(i+":"+cards[i].ID); // a list property can look like an Array! 
                 if (i < cards.Count -1)
                 {
                     Console.Write(" ");

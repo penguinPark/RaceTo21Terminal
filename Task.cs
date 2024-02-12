@@ -8,6 +8,7 @@ namespace RaceTo21
 		IntroducePlayers,
 		PlayerTurn,
 		CheckForEnd,
-		GameOver
+		GameOver,
+		Done // added Done to consider as the 'end of the game'
 	}
 }

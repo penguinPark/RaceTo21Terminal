@@ -74,7 +74,7 @@ namespace RaceTo21
                             Player notBusted = null; // assigned to null just in case this situation doesn't run and causes an error
                             for (int i = 0; i < numberOfPlayers; i++) // created a loop to check how many players bust
                             {
-                                if(players[i].status == PlayerStatus.bust) // if the player busts...
+                                if (players[i].status == PlayerStatus.bust) // if the player busts...
                                 {
                                     counter++; // ...counter will go up
                                 }
@@ -83,7 +83,7 @@ namespace RaceTo21
                                     notBusted = players[i]; // whoever doesn't bust will be saved
                                 }
                             }
-                            if (numberOfPlayers - 1 == counter)
+                            if (numberOfPlayers - 1 == counter) // if the numberOfPlayers-1 busted (meaning 1 did not bust)
                             {
                                 Player winner = notBusted; // whoever didn't bust will win
                                 cardTable.AnnounceWinner(winner); // announce winner
@@ -96,7 +96,8 @@ namespace RaceTo21
                             Player winner = player; // current player is winner
                             cardTable.AnnounceWinner(winner); // announce winner
                             player.status = PlayerStatus.win; // wins the game
-                            nextTask = Task.GameOver; // ends the game
+                            nextTask = Task.GameOver; // ends the game 
+                             
                         }
                     }
                     else
@@ -105,7 +106,10 @@ namespace RaceTo21
                     }
                 }
                 cardTable.ShowHand(player);
-                nextTask = Task.CheckForEnd;
+                if (player.status != PlayerStatus.win) // if the player status did not win [ so that the player who reaches 21 will end the game... ]
+                {
+                    nextTask = Task.CheckForEnd; // task will check for the end
+                }
             }
             else if (nextTask == Task.CheckForEnd)
             {
@@ -126,12 +130,63 @@ namespace RaceTo21
                 }
             }
             else // we shouldn't get here...
-            {
-                Console.WriteLine("I'm sorry, I don't know what to do now!");
-                nextTask = Task.GameOver;
+            { 
+                nextTask = Task.Done;
             }
         }
 
+        public void FinalTask() // created FinalTask() LEVEL2 on the homework pdf where: At end of round, each player is asked if they want to keep playing. If a player says no, they are removed from the player list.If only 1 player remains, that player is the winner(equivalent to everyone else “folding” in a card game)
+        {
+            List<Player> finishedPlayers = new List<Player>(); // created a new player list to hold the finishedPlayers
+            int playerCount = numberOfPlayers; // counter for numberOfPlayers
+            for (int i = 0; i < playerCount; i++) // created for loop to go through the players after game finished
+            {
+                Console.Write(players[i].name + " Do you want to continue playing? (Y/N)"); // does player want to keep playing?
+                string choice = Console.ReadLine(); 
+                if (choice.ToUpper().StartsWith("Y")) // if they type Y
+                {
+                }
+                else if (choice.ToUpper().StartsWith("N")) // if they type N
+                {
+                    finishedPlayers.Add(players[i]); // will add players to the finishedPlayers list
+                    numberOfPlayers--; // will count down the numberOfPlayers decreases when added to the finishedPlayers list
+                }
+                else
+                {
+                    Console.WriteLine("Please answer Y(es) or N(o)!"); // if they do not type Y or N
+                }
+            }
+            foreach (Player finishedplayer in finishedPlayers) // goes through each item in finishedPlayers and references each player with the finishedPlayer variable
+            {
+                players.Remove(finishedplayer); 
+
+            }
+            if (players.Count == 1) // if the number of remaining players is 1
+            {
+                cardTable.AnnounceWinner(players[0]); // announce winner
+            }
+            else if (players.Count == 0) // if the number of remaining players is 0
+            {
+                Console.Write("Everyone quit... LAME... >:("); // > : (
+            } else
+            {
+                // Console.Write("dsadhhsudkas " + players.Count.ToString()); 
+                nextTask = Task.PlayerTurn; // goes to playerturn
+                currentPlayer = 0; // current player resets to 0
+                Restart(); // goes to method Restart that I made
+            }
+        }
+        
+        public void Restart() // made method Restart to refresh the player and deck when a new game starts
+        {
+            foreach (Player player in players)
+            {
+                player.Restart(); // calls the Restart method made in the Player class to reset the player score, status and cards
+            }
+            deck = new Deck(); // new deck
+            deck.Shuffle(); // shuffles
+            deck.ShowAllCards(); 
+        }
         public int ScoreHand(Player player)
         {
             int score = 0;

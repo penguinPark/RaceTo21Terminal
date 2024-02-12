@@ -23,6 +23,13 @@ namespace RaceTo21
 		{
 			Console.WriteLine("Hello, my name is " + name + " and I am player #" + playerNum);
 		}
+
+		public void Restart() // created to make a reset all the player attributes for a new round
+        {
+			score = 0; // score resets to 0
+			cards = new List<Card>(); // makes a new deck of cards
+			status = PlayerStatus.active; // resets the player status
+	}
 	}
 }
 

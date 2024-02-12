@@ -9,8 +9,9 @@ namespace RaceTo21
 		public List<Card> cards = new List<Card>();
 		public PlayerStatus status = PlayerStatus.active;
 		public int score;
+        internal object card;
 
-		public Player(string n)
+        public Player(string n)
 		{
 			name = n;
         }

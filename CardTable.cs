@@ -88,7 +88,7 @@ namespace RaceTo21
                 Console.Write(player.name + " has: ");
                 foreach (Card card in player.cards) // changed to card class
                 {
-                    Console.Write(card.ID + " "); // showing card ID
+                    Console.Write(card.Name + ", "); // showing card full names
                 }
                 Console.Write("=" + player.score + "/21 ");
                 if (player.status != PlayerStatus.active)

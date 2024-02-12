@@ -107,12 +107,12 @@ namespace RaceTo21
             }
         }
 
-        public string DealTopCard()
+        public Card DealTopCard() // changed string to card
         {
-            string card = cards[cards.Count - 1].ID; // extract string ID 
+            Card card = cards[cards.Count - 1]; // extract card object from the top of the deck
             cards.RemoveAt(cards.Count - 1);
             // Console.WriteLine("I'm giving you " + card);
-            return card;
+            return card; // returns a card object
         }
     }
 }

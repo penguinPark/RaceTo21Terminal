@@ -11,7 +11,7 @@ namespace RaceTo21
         Deck deck = new Deck(); // deck of cards
         int currentPlayer = 0; // current player on list
         public Task nextTask; // keeps track of game state through enum Task
-        private bool cheating = false; // lets you cheat for testing purposes if true
+        private bool cheating = true; // lets you cheat for testing purposes if true
 
         public Game(CardTable c)
         {
@@ -64,7 +64,7 @@ namespace RaceTo21
                 {
                     if (cardTable.OfferACard(player))
                     {
-                        string card = deck.DealTopCard();
+                        Card card = deck.DealTopCard(); // card object is returned here
                         player.cards.Add(card);
                         player.score = ScoreHand(player);
                         if (player.score > 21)
@@ -73,7 +73,10 @@ namespace RaceTo21
                         }
                         else if (player.score == 21)
                         {
-                            player.status = PlayerStatus.win;
+                            Player winner = player; // current player is winner
+                            cardTable.AnnounceWinner(winner); // announce winner
+                            player.status = PlayerStatus.win; // wins the game
+                            nextTask = Task.GameOver; // ends the game
                         }
                     }
                     else
@@ -124,9 +127,10 @@ namespace RaceTo21
             }
             else
             {
-                foreach (string card in player.cards)
+                foreach (Card card in player.cards)
                 {
-                    string faceValue = card.Remove(card.Length - 1);
+                    //string faceValue = card.Remove(card.Length - 1);
+                    string faceValue = card.ID[0].ToString(); // made string faceValue to show the cardName string that the player has
                     switch (faceValue)
                     {
                         case "K":

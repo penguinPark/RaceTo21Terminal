@@ -11,7 +11,7 @@ namespace RaceTo21
         Deck deck = new Deck(); // deck of cards
         int currentPlayer = 0; // current player on list
         public Task nextTask; // keeps track of game state through enum Task
-        private bool cheating = true; // lets you cheat for testing purposes if true
+        private bool cheating = false; // lets you cheat for testing purposes if true
 
         public Game(CardTable c)
         {

@@ -64,7 +64,7 @@ namespace RaceTo21
         {
             while (true)
             {
-                Console.Write(player.name + ", do you want a card? (Y/N)");
+                Console.Write(player.name + ", do you want a card? (Y/N) If you haven't picked a card, type 'Y'");
                 string response = Console.ReadLine();
                 if (response.ToUpper().StartsWith("Y"))
                 {
@@ -72,6 +72,11 @@ namespace RaceTo21
                 }
                 else if (response.ToUpper().StartsWith("N"))
                 {
+                    if (player.score == 0)
+                    {
+                        Console.WriteLine("You can not 'stay' when you haven't taken any cards! A card was taken.");
+                        return true; // they will not be able to 'bust' on their first turn and will register as a hit.
+                    }
                     return false;
                 }
                 else

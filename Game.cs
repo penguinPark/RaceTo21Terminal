@@ -70,6 +70,26 @@ namespace RaceTo21
                         if (player.score > 21)
                         {
                             player.status = PlayerStatus.bust;
+                            int counter = 0; // counting how many players bust
+                            Player notBusted = null; // assigned to null just in case this situation doesn't run and causes an error
+                            for (int i = 0; i < numberOfPlayers; i++) // created a loop to check how many players bust
+                            {
+                                if(players[i].status == PlayerStatus.bust) // if the player busts...
+                                {
+                                    counter++; // ...counter will go up
+                                }
+                                else
+                                {
+                                    notBusted = players[i]; // whoever doesn't bust will be saved
+                                }
+                            }
+                            if (numberOfPlayers - 1 == counter)
+                            {
+                                Player winner = notBusted; // whoever didn't bust will win
+                                cardTable.AnnounceWinner(winner); // announce winner
+                                winner.status = PlayerStatus.win; // wins the game
+                                nextTask = Task.GameOver; // ends the game
+                            }
                         }
                         else if (player.score == 21)
                         {

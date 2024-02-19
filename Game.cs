@@ -65,7 +65,6 @@ namespace RaceTo21
             else if (nextTask == Task.PlayerTurn)
             {
                 Player player = players[currentPlayer];
-               // cardTable.ShowHands(players);
                 if (player.status == PlayerStatus.active)
                 {
                     if (cardTable.OfferACard(player))
@@ -106,8 +105,7 @@ namespace RaceTo21
                             player.status = PlayerStatus.win; // wins the game
                             DoFinalScoring(); // goes to do final scoring
                             previousWinner = winner; // keeps the winner in this variable
-                            nextTask = Task.GameOver; // ends the game 
-                             
+                            nextTask = Task.GameOver; // ends the game       
                         }
                     }
                     else
@@ -150,11 +148,11 @@ namespace RaceTo21
         {
             for (int i = 0; i < players.Count; i++)
             {
-                if (players[i].totalScore >= winningScore)
+                if (players[i].totalScore >= winningScore) // if a player has a total score that is greater than or equal to the winning score, they win the whole game
                 {
-                    Console.WriteLine(players[i].name + " won the whole game! YIPPEEEEEEE!!!!!!");
-                    winTheGame();
-                    return;
+                    Console.WriteLine(players[i].name + " won the whole game! They are the TRUEEEEE WINNERRRR!!! YIPPEEEEEEE!!!!!! :DDDD");
+                    winTheGame(); // goes to the method winTheGame
+                    return; // gets out of this method
                 }
             }
             List<Player> finishedPlayers = new List<Player>(); // created a new player list to hold the finishedPlayers
@@ -201,6 +199,9 @@ namespace RaceTo21
             currentPlayer = 0;
             winningScore = 0; // resets the winningScore
             players = new List<Player>(); // resets the list of players
+            deck = new Deck(); // new deck
+            deck.Shuffle(); // shuffles deck
+            deck.ShowAllCards();
             nextTask = Task.GetNumberOfPlayers; // goes back to the first task
             
         }

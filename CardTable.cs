@@ -60,25 +60,25 @@ namespace RaceTo21
             return response;
         }
 
-        public int GetAgreedScore(int winningScore, List<Player> player)
+        public int GetAgreedScore(int winningScore, List<Player> player) // this method was made to get an agreed winning score amongst the players
         {
-            bool agreed = false;
+            bool agreed = false; 
             int position = 0; // first player on the list
-            while (!agreed)
+            while (!agreed) // while not everyone agrees
             {
-                Console.Write("What should the winning total score be? " + player[position].name);
+                Console.Write("What should the winning total score be? " + player[position].name); 
                 string response = Console.ReadLine(); // their input
                 int numberResponse = int.Parse(response); // response as a number
-                int agreeTrack = 0;
+                int agreeTrack = 0; // made to count the number of 'agreeds'
                 for (int i = 0; i < player.Count; i++)
                 {
-                    if (i != position)
+                    if (i != position) // will not ask the person who input the number
                     {
-                        Console.Write("Are you okay with this score " + player[i].name + "? Reply: Y/N");
+                        Console.Write("Are you okay with this score " + player[i].name + "? Reply: Y/N ");
                         string scoreResponse = Console.ReadLine();
                         if (scoreResponse.ToUpper().StartsWith("Y"))
                         {
-                            agreeTrack++;
+                            agreeTrack++; // this will increase
                         }
                         else if (!(scoreResponse.ToUpper().StartsWith("Y") || scoreResponse.ToUpper().StartsWith("N"))) {
                             Console.Write("Please put Y or N...........");
@@ -86,14 +86,14 @@ namespace RaceTo21
                         }
                     }
                 }
-                if (agreeTrack == player.Count - 1)
+                if (agreeTrack == player.Count - 1) // if the agreeTrack == the playercount - 1, then everyone except the person who wanted the winning score agreed
                 {
                     return numberResponse; // everyone agreed to this score
                 }
-                position++;
-                if (position > player.Count - 1 )
+                position++; // this increases IF not everyone agrees to the winning score, going to the next player in the list
+                if (position > player.Count - 1 ) // if it goes through every player on the list, it'll go back to the initial player on the list and ask the questions again
                 {
-                    position = 0;
+                    position = 0; // goes back to initial player
                 }
             }
             return 0; // should never get here...
@@ -164,7 +164,7 @@ namespace RaceTo21
         {
             if (player != null)
             {
-                Console.WriteLine(player.name + " wins!");
+                Console.WriteLine(player.name + " wins this round!"); // changed to each round
             }
             else
             {

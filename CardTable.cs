@@ -60,7 +60,7 @@ namespace RaceTo21
             return response;
         }
 
-        public static int GetAgreedScore(int winningScore, List<Player> player)
+        public int GetAgreedScore(int winningScore, List<Player> player)
         {
             bool agreed = false;
             int position = 0; // first player on the list

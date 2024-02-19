@@ -59,7 +59,7 @@ namespace RaceTo21
                 nextTask = Task.AgreedScore; // goes to agreedScore
             } else if (nextTask == Task.AgreedScore)
             {
-                CardTable.GetAgreedScore(winningScore, players); // goes to the method GetAgreedScore
+                winningScore = cardTable.GetAgreedScore(winningScore, players); // goes to the method GetAgreedScore
                 nextTask = Task.PlayerTurn;
             }
             else if (nextTask == Task.PlayerTurn)
@@ -125,7 +125,6 @@ namespace RaceTo21
             {
                 if (!CheckActivePlayers())
                 {
-                    Console.WriteLine("dsad");
                     Player winner = DoFinalScoring();        
                     previousWinner = winner;
                     cardTable.AnnounceWinner(winner);
@@ -149,6 +148,15 @@ namespace RaceTo21
 
         public void FinalTask() // created FinalTask() LEVEL2 on the homework pdf where: At end of round, each player is asked if they want to keep playing. If a player says no, they are removed from the player list. If only 1 player remains, that player is the winner(equivalent to everyone else “folding” in a card game)
         {
+            for (int i = 0; i < players.Count; i++)
+            {
+                if (players[i].totalScore >= winningScore)
+                {
+                    Console.WriteLine(players[i].name + " won the whole game! YIPPEEEEEEE!!!!!!");
+                    winTheGame();
+                    return;
+                }
+            }
             List<Player> finishedPlayers = new List<Player>(); // created a new player list to hold the finishedPlayers
             int playerCount = numberOfPlayers; // counter for numberOfPlayers
             for (int i = 0; i < playerCount; i++) // created for loop to go through the players after game finished
@@ -186,6 +194,15 @@ namespace RaceTo21
                 Console.WriteLine("Shuffling Players...");
                 Restart(); // goes to method Restart that I made
             }
+        }
+
+        public void winTheGame() // restarts the whole game after there is a true winner
+        {
+            currentPlayer = 0;
+            winningScore = 0; // resets the winningScore
+            players = new List<Player>(); // resets the list of players
+            nextTask = Task.GetNumberOfPlayers; // goes back to the first task
+            
         }
 
         public void PlayerShuffle() // I created this method to shuffle all the players after the game is over. 

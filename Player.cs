@@ -27,7 +27,7 @@ namespace RaceTo21
 		}
 
 		public void Restart() // created to make a reset all the player attributes for a new round
-        {
+		{
 			score = 0; // score resets to 0
 			cards = new List<Card>(); // makes a new deck of cards
 			status = PlayerStatus.active; // resets the player status

@@ -13,6 +13,7 @@ namespace RaceTo21
         public Task nextTask; // keeps track of game state through enum Task
         private bool cheating = false; // lets you cheat for testing purposes if true
         Player previousWinner; // to keep track of the player who won
+        int winningScore; // variable to represent the winning total score
 
         public Game(CardTable c)
         {
@@ -55,12 +56,16 @@ namespace RaceTo21
             else if (nextTask == Task.IntroducePlayers)
             {
                 cardTable.ShowPlayers(players);
+                nextTask = Task.AgreedScore; // goes to agreedScore
+            } else if (nextTask == Task.AgreedScore)
+            {
+                CardTable.GetAgreedScore(winningScore, players); // goes to the method GetAgreedScore
                 nextTask = Task.PlayerTurn;
             }
             else if (nextTask == Task.PlayerTurn)
             {
-                cardTable.ShowHands(players);
                 Player player = players[currentPlayer];
+               // cardTable.ShowHands(players);
                 if (player.status == PlayerStatus.active)
                 {
                     if (cardTable.OfferACard(player))
@@ -87,8 +92,9 @@ namespace RaceTo21
                             if (numberOfPlayers - 1 == counter) // if the numberOfPlayers-1 busted (meaning 1 did not bust)
                             {
                                 Player winner = notBusted; // whoever didn't bust will win
+                                cardTable.ShowHands(players);
                                 cardTable.AnnounceWinner(winner); // announce winner
-                                winner.status = PlayerStatus.win; // wins the game
+                                winner.status = PlayerStatus.win; // wins the game                        
                                 previousWinner = winner; // keeps the winner in this variable
                                 nextTask = Task.GameOver; // ends the game
                             }
@@ -98,6 +104,7 @@ namespace RaceTo21
                             Player winner = player; // current player is winner
                             cardTable.AnnounceWinner(winner); // announce winner
                             player.status = PlayerStatus.win; // wins the game
+                            DoFinalScoring(); // goes to do final scoring
                             previousWinner = winner; // keeps the winner in this variable
                             nextTask = Task.GameOver; // ends the game 
                              
@@ -118,7 +125,8 @@ namespace RaceTo21
             {
                 if (!CheckActivePlayers())
                 {
-                    Player winner = DoFinalScoring();
+                    Console.WriteLine("dsad");
+                    Player winner = DoFinalScoring();        
                     previousWinner = winner;
                     cardTable.AnnounceWinner(winner);
                     nextTask = Task.GameOver;
@@ -180,7 +188,7 @@ namespace RaceTo21
             }
         }
 
-        public void PlayerShuffle() // This shuffles all the players after the game is over. 
+        public void PlayerShuffle() // I created this method to shuffle all the players after the game is over. 
         {
             Console.WriteLine("Shuffling Players..."); // letting players know that the players are being shuffled
             Random random = new Random();
@@ -264,13 +272,13 @@ namespace RaceTo21
 
         public Player DoFinalScoring()
         {
+            Console.WriteLine("DOING THE FINAL SCORING");
             int highScore = 0;
             foreach (var player in players)
             {
-                cardTable.ShowHand(player);
                 if (player.status == PlayerStatus.win) // someone hit 21
                 {
-                    return player;
+                    highScore = player.score; // so winning player can be returned
                 }
                 if (player.status == PlayerStatus.stay) // still could win...
                 {
@@ -279,13 +287,20 @@ namespace RaceTo21
                         highScore = player.score;
                     }
                 }
-                // if busted don't bother checking!
+                if (player.status == PlayerStatus.bust)
+                {
+                    player.totalScore -= (player.score - 21);
+                }
             }
             if (highScore > 0) // someone scored, anyway!
             {
                 // find the FIRST player in list who meets win condition
-                return players.Find(player => player.score == highScore);
+                Player winner = players.Find(player => player.score == highScore); 
+                winner.totalScore += winner.score; // the winner's + winner's with the highest score when they stay total score will be updated with their score
+                cardTable.showFinalTotalScores(players); // shows all the player's final scores
+                return winner; // returns the winner
             }
+            cardTable.showFinalTotalScores(players);
             return null; // everyone must have busted because nobody won!
         }
     }

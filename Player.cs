@@ -9,11 +9,13 @@ namespace RaceTo21
 		public List<Card> cards = new List<Card>();
 		public PlayerStatus status = PlayerStatus.active;
 		public int score;
-        internal object card;
+		internal object card;
+		public int totalScore; // to calculate the player's total scores for the game
 
-        public Player(string n)
+		public Player(string n)
 		{
 			name = n;
+			totalScore = 0;
         }
 
 		/* Introduces player by name

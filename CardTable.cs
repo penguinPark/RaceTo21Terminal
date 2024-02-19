@@ -60,6 +60,45 @@ namespace RaceTo21
             return response;
         }
 
+        public static int GetAgreedScore(int winningScore, List<Player> player)
+        {
+            bool agreed = false;
+            int position = 0; // first player on the list
+            while (!agreed)
+            {
+                Console.Write("What should the winning total score be? " + player[position].name);
+                string response = Console.ReadLine(); // their input
+                int numberResponse = int.Parse(response); // response as a number
+                int agreeTrack = 0;
+                for (int i = 0; i < player.Count; i++)
+                {
+                    if (i != position)
+                    {
+                        Console.Write("Are you okay with this score " + player[i].name + "? Reply: Y/N");
+                        string scoreResponse = Console.ReadLine();
+                        if (scoreResponse.ToUpper().StartsWith("Y"))
+                        {
+                            agreeTrack++;
+                        }
+                        else if (!(scoreResponse.ToUpper().StartsWith("Y") || scoreResponse.ToUpper().StartsWith("N"))) {
+                            Console.Write("Please put Y or N...........");
+                            i--; // goes back to current player and asks them again
+                        }
+                    }
+                }
+                if (agreeTrack == player.Count - 1)
+                {
+                    return numberResponse; // everyone agreed to this score
+                }
+                position++;
+                if (position > player.Count - 1 )
+                {
+                    position = 0;
+                }
+            }
+            return 0; // should never get here...
+        }
+
         public bool OfferACard(Player player)
         {
             if (player.cards.Count == 0)
@@ -90,9 +129,9 @@ namespace RaceTo21
         {
             if (player.cards.Count > 0)
             {
-                Console.Write(player.name + " has: ");
                 foreach (Card card in player.cards) // changed to card class
                 {
+                    Console.Write(player.name + " has "); 
                     Console.Write(card.Name + ", "); // showing card full names
                 }
                 Console.Write("=" + player.score + "/21 ");
@@ -101,6 +140,14 @@ namespace RaceTo21
                     Console.Write("(" + player.status.ToString().ToUpper() + ")");
                 }
                 Console.WriteLine();
+            }
+        }
+
+        public void showFinalTotalScores(List<Player> players) // I made this method to show the total final scores of every player after each round
+        {
+            foreach (Player player in players)
+            {
+                Console.WriteLine(player.name + "'s score is " + player.totalScore);
             }
         }
 
@@ -118,7 +165,6 @@ namespace RaceTo21
             if (player != null)
             {
                 Console.WriteLine(player.name + " wins!");
-
             }
             else
             {

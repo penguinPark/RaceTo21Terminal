@@ -66,7 +66,7 @@ namespace RaceTo21
             int position = 0; // first player on the list
             while (!agreed) // while not everyone agrees
             {
-                Console.Write("What should the winning total score be? " + player[position].name); 
+                Console.Write("What should the winning total score be, " + player[position].name + "? "); 
                 string response = Console.ReadLine(); // their input
                 int numberResponse = int.Parse(response); // response as a number
                 int agreeTrack = 0; // made to count the number of 'agreeds'

@@ -103,7 +103,7 @@ namespace RaceTo21
         {
             if (player.cards.Count == 0)
             {
-                Console.WriteLine("A card was given at the start"); // this is so that everyone gets an initial card
+                Console.WriteLine("A card was given at the start"); // this is so that everyone gets an initial card at the start
                 return true;
             }
             while (true)

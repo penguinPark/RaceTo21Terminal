@@ -12,6 +12,7 @@ namespace RaceTo21
         int currentPlayer = 0; // current player on list
         public Task nextTask; // keeps track of game state through enum Task
         private bool cheating = false; // lets you cheat for testing purposes if true
+        Player previousWinner; // to keep track of the player who won
 
         public Game(CardTable c)
         {
@@ -88,6 +89,7 @@ namespace RaceTo21
                                 Player winner = notBusted; // whoever didn't bust will win
                                 cardTable.AnnounceWinner(winner); // announce winner
                                 winner.status = PlayerStatus.win; // wins the game
+                                previousWinner = winner; // keeps the winner in this variable
                                 nextTask = Task.GameOver; // ends the game
                             }
                         }
@@ -96,6 +98,7 @@ namespace RaceTo21
                             Player winner = player; // current player is winner
                             cardTable.AnnounceWinner(winner); // announce winner
                             player.status = PlayerStatus.win; // wins the game
+                            previousWinner = winner; // keeps the winner in this variable
                             nextTask = Task.GameOver; // ends the game 
                              
                         }
@@ -116,6 +119,7 @@ namespace RaceTo21
                 if (!CheckActivePlayers())
                 {
                     Player winner = DoFinalScoring();
+                    previousWinner = winner;
                     cardTable.AnnounceWinner(winner);
                     nextTask = Task.GameOver;
                 }
@@ -135,7 +139,7 @@ namespace RaceTo21
             }
         }
 
-        public void FinalTask() // created FinalTask() LEVEL2 on the homework pdf where: At end of round, each player is asked if they want to keep playing. If a player says no, they are removed from the player list.If only 1 player remains, that player is the winner(equivalent to everyone else “folding” in a card game)
+        public void FinalTask() // created FinalTask() LEVEL2 on the homework pdf where: At end of round, each player is asked if they want to keep playing. If a player says no, they are removed from the player list. If only 1 player remains, that player is the winner(equivalent to everyone else “folding” in a card game)
         {
             List<Player> finishedPlayers = new List<Player>(); // created a new player list to hold the finishedPlayers
             int playerCount = numberOfPlayers; // counter for numberOfPlayers
@@ -143,17 +147,15 @@ namespace RaceTo21
             {
                 Console.Write(players[i].name + " Do you want to continue playing? (Y/N)"); // does player want to keep playing?
                 string choice = Console.ReadLine(); 
-                if (choice.ToUpper().StartsWith("Y")) // if they type Y
+                if (!(choice.ToUpper().StartsWith("Y") || choice.ToUpper().StartsWith("N"))) // if they do not type Y or N
                 {
+                    Console.WriteLine("Please answer Y(es) or N(o)!");
+                    i--; // so it goes back to the current player and asks them again
                 }
                 else if (choice.ToUpper().StartsWith("N")) // if they type N
                 {
                     finishedPlayers.Add(players[i]); // will add players to the finishedPlayers list
                     numberOfPlayers--; // will count down the numberOfPlayers decreases when added to the finishedPlayers list
-                }
-                else
-                {
-                    Console.WriteLine("Please answer Y(es) or N(o)!"); // if they do not type Y or N
                 }
             }
             foreach (Player finishedplayer in finishedPlayers) // goes through each item in finishedPlayers and references each player with the finishedPlayer variable
@@ -167,25 +169,47 @@ namespace RaceTo21
             }
             else if (players.Count == 0) // if the number of remaining players is 0
             {
-                Console.Write("Everyone quit... LAME... >:("); // > : (
+                Console.Write("Everyone quit... LAME... >:("); // >:(
             } else
-            {
-                // Console.Write("dsadhhsudkas " + players.Count.ToString()); 
+            { 
                 nextTask = Task.PlayerTurn; // goes to playerturn
                 currentPlayer = 0; // current player resets to 0
+
+                Console.WriteLine("Shuffling Players...");
                 Restart(); // goes to method Restart that I made
             }
         }
-        
+
+        public void PlayerShuffle() // This shuffles all the players after the game is over. 
+        {
+            Console.WriteLine("Shuffling Players..."); // letting players know that the players are being shuffled
+            Random random = new Random();
+            for (int i = 0; i < players.Count; i++) // loop to shuffle the players. Inspired by the Deck Shuffle method in the Deck Class.
+            {
+                Player tempPlayer = players[i]; 
+                int swapping = random.Next(players.Count);
+                players[i] = players[swapping];
+                players[swapping] = tempPlayer;
+            }
+            if (previousWinner.status == PlayerStatus.active) // this is to make sure that the players still shuffle even after the winner leaves. So if the winner stays, this code will run.
+            {
+                int winTrack = players.IndexOf(previousWinner); // keeps track if the index the previous winner was on
+                Player lastPlayer = players[players.Count - 1]; // keeps the last player object
+                players[winTrack] = lastPlayer; // the position that the winning player was in gets replaced with the last player
+                players[players.Count - 1] = previousWinner; // the winning player goes into the last position of the list
+            }
+        }
+
         public void Restart() // made method Restart to refresh the player and deck when a new game starts
         {
             foreach (Player player in players)
             {
-                player.Restart(); // calls the Restart method made in the Player class to reset the player score, status and cards
+                player.Restart(); // calls the Restart method made in the Player class to reset the player score, status, and cards
             }
             deck = new Deck(); // new deck
-            deck.Shuffle(); // shuffles
-            deck.ShowAllCards(); 
+            deck.Shuffle(); // shuffles deck
+            deck.ShowAllCards();
+            PlayerShuffle(); // shuffles players!
         }
         public int ScoreHand(Player player)
         {
@@ -211,6 +235,7 @@ namespace RaceTo21
                         case "K":
                         case "Q":
                         case "J":
+                        case "1": // to make sure that the 10 card will score +10
                             score = score + 10;
                             break;
                         case "A":

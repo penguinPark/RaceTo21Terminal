@@ -62,21 +62,21 @@ namespace RaceTo21
 
         public bool OfferACard(Player player)
         {
+            if (player.cards.Count == 0)
+            {
+                Console.WriteLine("A card was given at the start"); // this is so that everyone gets an initial card
+                return true;
+            }
             while (true)
             {
-                Console.Write(player.name + ", do you want a card? (Y/N) If you haven't picked a card, type 'Y'");
+                Console.Write(player.name + ", do you want a card? (Y/N)");
                 string response = Console.ReadLine();
-                if (response.ToUpper().StartsWith("Y"))
+                if (response.ToUpper().StartsWith("Y")) 
                 {
                     return true;
                 }
                 else if (response.ToUpper().StartsWith("N"))
                 {
-                    if (player.score == 0)
-                    {
-                        Console.WriteLine("You can not 'stay' when you haven't taken any cards! A card was taken.");
-                        return true; // they will not be able to 'bust' on their first turn and will register as a hit.
-                    }
                     return false;
                 }
                 else

@@ -108,7 +108,7 @@ namespace RaceTo21
             }
             while (true)
             {
-                Console.Write(player.name + ", do you want a card? (Y/N)");
+                Console.Write(player.name + ", do you want to draw a card? (Y/N)");
                 string response = Console.ReadLine();
                 if (response.ToUpper().StartsWith("Y")) 
                 {
@@ -147,7 +147,7 @@ namespace RaceTo21
         {
             foreach (Player player in players)
             {
-                Console.WriteLine(player.name + "'s score is " + player.totalScore);
+                Console.WriteLine(player.name + "'s total score is " + player.totalScore);
             }
         }
 

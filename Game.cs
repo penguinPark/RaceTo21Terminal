@@ -290,7 +290,7 @@ namespace RaceTo21
 
         public Player DoFinalScoring()
         {
-            Console.WriteLine("DOING THE FINAL SCORING");
+            Console.WriteLine("DOING THE FINAL SCORING!" + " Total Winning Score:" + winningScore);
             int highScore = 0;
             foreach (var player in players)
             {

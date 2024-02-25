@@ -66,7 +66,7 @@ namespace RaceTo21
             int position = 0; // first player on the list
             while (!agreed) // while not everyone agrees
             {
-                Console.Write("What should the winning total score be, " + player[position].name + "? "); 
+                Console.Write("What should the winning total score be, " + player[position].Name + "? "); 
                 string response = Console.ReadLine(); // their input
                 int numberResponse = int.Parse(response); // response as a number
                 int agreeTrack = 0; // made to count the number of 'agreeds'
@@ -74,7 +74,7 @@ namespace RaceTo21
                 {
                     if (i != position) // will not ask the person who input the number
                     {
-                        Console.Write("Are you okay with this score " + player[i].name + "? Reply: Y/N ");
+                        Console.Write("Are you okay with this score " + player[i].Name + "? Reply: Y/N ");
                         string scoreResponse = Console.ReadLine();
                         if (scoreResponse.ToUpper().StartsWith("Y"))
                         {
@@ -108,7 +108,7 @@ namespace RaceTo21
             }
             while (true)
             {
-                Console.Write(player.name + ", do you want to draw a card? (Y/N)");
+                Console.Write(player.Name + ", do you want to draw a card? (Y/N)");
                 string response = Console.ReadLine();
                 if (response.ToUpper().StartsWith("Y")) 
                 {
@@ -131,10 +131,10 @@ namespace RaceTo21
             {
                 foreach (Card card in player.cards) // changed to card class
                 {
-                    Console.Write(player.name + " has "); 
+                    Console.Write(player.Name + " has "); 
                     Console.Write(card.Name + ", "); // showing card full names
                 }
-                Console.Write("=" + player.score + "/21 ");
+                Console.Write("=" + player.Score + "/21 ");
                 if (player.status != PlayerStatus.active)
                 {
                     Console.Write("(" + player.status.ToString().ToUpper() + ")");
@@ -147,7 +147,7 @@ namespace RaceTo21
         {
             foreach (Player player in players)
             {
-                Console.WriteLine(player.name + "'s total score is " + player.totalScore);
+                Console.WriteLine(player.Name + "'s total score is " + player.TotalScore);
             }
         }
 
@@ -164,7 +164,7 @@ namespace RaceTo21
         {
             if (player != null)
             {
-                Console.WriteLine(player.name + " wins this round!"); // changed to each round
+                Console.WriteLine(player.Name + " wins this round!"); // changed to each round
             }
             else
             {

@@ -13,7 +13,7 @@ namespace RaceTo21
         public Task nextTask; // keeps track of game state through enum Task
         private bool cheating = false; // lets you cheat for testing purposes if true
         Player previousWinner; // to keep track of the player who won
-        int winningScore; // variable to represent the winning total score
+        public int winningScore; // variable to represent the winning total score
 
         public Game(CardTable c)
         {
@@ -71,8 +71,8 @@ namespace RaceTo21
                     {
                         Card card = deck.DealTopCard(); // card object is returned here
                         player.cards.Add(card);
-                        player.score = ScoreHand(player);
-                        if (player.score > 21)
+                        player.Score = ScoreHand(player);
+                        if (player.Score > 21)
                         {
                             player.status = PlayerStatus.bust;
                             int counter = 0; // counting how many players bust
@@ -98,7 +98,7 @@ namespace RaceTo21
                                 nextTask = Task.GameOver; // ends the game
                             }
                         }
-                        else if (player.score == 21)
+                        else if (player.Score == 21)
                         {
                             Player winner = player; // current player is winner
                             cardTable.AnnounceWinner(winner); // announce winner
@@ -148,9 +148,9 @@ namespace RaceTo21
         {
             for (int i = 0; i < players.Count; i++)
             {
-                if (players[i].totalScore >= winningScore) // if a player has a total score that is greater than or equal to the winning score, they win the whole game
+                if (players[i].TotalScore >= winningScore) // if a player has a total score that is greater than or equal to the winning score, they win the whole game
                 {
-                    Console.WriteLine(players[i].name + " won the whole game! They are the TRUEEEEE WINNERRRR!!! YIPPEEEEEEE!!!!!! :DDDD");
+                    Console.WriteLine(players[i].Name + " won the whole game! They are the TRUEEEEE WINNERRRR!!! YIPPEEEEEEE!!!!!! :DDDD");
                     winTheGame(); // goes to the method winTheGame
                     return; // gets out of this method
                 }
@@ -159,7 +159,7 @@ namespace RaceTo21
             int playerCount = numberOfPlayers; // counter for numberOfPlayers
             for (int i = 0; i < playerCount; i++) // created for loop to go through the players after game finished
             {
-                Console.Write(players[i].name + " Do you want to continue playing? (Y/N)"); // does player want to keep playing?
+                Console.Write(players[i].Name + " Do you want to continue playing? (Y/N)"); // does player want to keep playing?
                 string choice = Console.ReadLine(); 
                 if (!(choice.ToUpper().StartsWith("Y") || choice.ToUpper().StartsWith("N"))) // if they do not type Y or N
                 {
@@ -245,7 +245,7 @@ namespace RaceTo21
                 string response = null;
                 while (int.TryParse(response, out score) == false)
                 {
-                    Console.Write("OK, what should player " + player.name + "'s score be?");
+                    Console.Write("OK, what should player " + player.Name + "'s score be?");
                     response = Console.ReadLine();
                 }
                 return score;
@@ -296,25 +296,25 @@ namespace RaceTo21
             {
                 if (player.status == PlayerStatus.win) // someone hit 21
                 {
-                    highScore = player.score; // so winning player can be returned
+                    highScore = player.Score; // so winning player can be returned
                 }
                 if (player.status == PlayerStatus.stay) // still could win...
                 {
-                    if (player.score > highScore)
+                    if (player.Score > highScore)
                     {
-                        highScore = player.score;
+                        highScore = player.Score;
                     }
                 }
                 if (player.status == PlayerStatus.bust)
                 {
-                    player.totalScore -= (player.score - 21);
+                    player.TotalScore -= (player.Score - 21);
                 }
             }
             if (highScore > 0) // someone scored, anyway!
             {
                 // find the FIRST player in list who meets win condition
-                Player winner = players.Find(player => player.score == highScore); 
-                winner.totalScore += winner.score; // the winner's + winner's with the highest score when they stay total score will be updated with their score
+                Player winner = players.Find(player => player.Score == highScore);
+                winner.TotalScore += winner.Score; // the winner's + winner's with the highest score when they stay total score will be updated with their score
                 cardTable.showFinalTotalScores(players); // shows all the player's final scores
                 return winner; // returns the winner
             }
